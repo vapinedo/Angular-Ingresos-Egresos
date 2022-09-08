@@ -13,7 +13,11 @@ export class AuthService {
     return this.auth.createUserWithEmailAndPassword(email, password);
   }
 
-  loginUsuario(email: string, password: string) {
+  loginUsuario(email: string, password: string): Promise<any> {
     return this.auth.signInWithEmailAndPassword(email, password);
+  }
+
+  logout(): Promise<any> {
+    return this.auth.signOut();
   }
 }
