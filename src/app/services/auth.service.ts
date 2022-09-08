@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { map, Observable } from 'rxjs';
 
 
 @Injectable({
@@ -9,7 +10,7 @@ export class AuthService {
 
   constructor(public auth: AngularFireAuth) { }
 
-  initAuthListener() {
+  initAuthListener(): void {
     this.auth.authState.subscribe(firebaseUser => {
       console.log(firebaseUser);
       console.log(firebaseUser?.uid);
@@ -27,5 +28,11 @@ export class AuthService {
 
   logout(): Promise<any> {
     return this.auth.signOut();
+  }
+
+  isAuth() {
+    return this.auth.authState.pipe(
+      map(fUser => fUser != null)
+    ); 
   }
 }
