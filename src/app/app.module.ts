@@ -43,7 +43,7 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
     provideFirestore(() => getFirestore()),
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     AngularFirestoreModule,
-    AngularFireAuthModule,
+    AngularFireAuthModule
   ],
   providers: [],
   bootstrap: [AppComponent]
