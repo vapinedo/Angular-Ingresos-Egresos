@@ -3,16 +3,24 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  firebaseConfig: {
-    apiKey: "AIzaSyDSZNcnk0VXBdWWlnxImRK8P7MFlGAdscg",
-    authDomain: "ng-ingreso-egreso.firebaseapp.com",
-    projectId: "ng-ingreso-egreso",
-    storageBucket: "ng-ingreso-egreso.appspot.com",
-    messagingSenderId: "54609963360",
-    appId: "1:54609963360:web:1e312ec61ae95b48949605"
-  },
   production: false
 };
+
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+
+export const firebaseConfig = {
+  apiKey: "AIzaSyDSZNcnk0VXBdWWlnxImRK8P7MFlGAdscg",
+  authDomain: "ng-ingreso-egreso.firebaseapp.com",
+  projectId: "ng-ingreso-egreso",
+  storageBucket: "ng-ingreso-egreso.appspot.com",
+  messagingSenderId: "54609963360",
+  appId: "1:54609963360:web:1e312ec61ae95b48949605"
+};
+
+// Initialize Firebase
+const firebaseApp = initializeApp(firebaseConfig);
+export const firebaseDB = getFirestore(firebaseApp);
 
 /*
  * For easier debugging in development mode, you can import the following file

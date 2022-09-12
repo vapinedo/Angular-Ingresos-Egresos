@@ -1,6 +1,8 @@
+import { map } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { firebaseDB } from 'src/environments/environment';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { map, Observable } from 'rxjs';
+import { collection, doc, setDoc, getDocs, getDoc, deleteDoc, DocumentData } from '@firebase/firestore';
 
 
 @Injectable({
@@ -8,7 +10,12 @@ import { map, Observable } from 'rxjs';
 })
 export class AuthService {
 
-  constructor(public auth: AngularFireAuth) { }
+  private readonly collectionName = "users";
+  private readonly collectionRef = collection(firebaseDB, this.collectionName);
+
+  constructor(
+    public auth: AngularFireAuth,
+  ) { }
 
   initAuthListener(): void {
     this.auth.authState.subscribe(firebaseUser => {
@@ -18,8 +25,17 @@ export class AuthService {
     });
   }
 
-  crearUsuario(nombre: string, email: string, password: string): Promise<any> {
-    return this.auth.createUserWithEmailAndPassword(email, password);
+  async crearUsuario(nombre: string, email: string, password: string) {
+    try {
+      const { user } = await this.auth.createUserWithEmailAndPassword(email, password);
+      if (user !== null) {
+        const docId = String(user.uid);
+        const docPayload = { nombre, email, password, uid: docId };
+        return await setDoc(doc(this.collectionRef, docId), docPayload);
+      }
+    } catch (error) {
+      console.warn(error);
+    }
   }
 
   loginUsuario(email: string, password: string): Promise<any> {
