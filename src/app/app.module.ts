@@ -4,12 +4,16 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
 
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { StoreModule } from "@ngrx/store";
+import { appReducers } from './app.reducer';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
+// import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+// import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { firebaseConfig } from '../environments/environment';
+import { firebaseConfig, environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
@@ -21,7 +25,6 @@ import { DetalleComponent } from './ingreso-egreso/detalle/detalle.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
-import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -41,11 +44,15 @@ import { StoreModule } from '@ngrx/store';
     AppRoutingModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    provideFirestore(() => getFirestore()),
-    provideFirebaseApp(() => initializeApp(firebaseConfig)),
+    // provideFirestore(() => getFirestore()),
+    // provideFirebaseApp(() => initializeApp(firebaseConfig)),
     AngularFirestoreModule,
     AngularFireAuthModule,
-    StoreModule.forRoot({}, {})
+    StoreModule.forRoot(appReducers),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production,
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
