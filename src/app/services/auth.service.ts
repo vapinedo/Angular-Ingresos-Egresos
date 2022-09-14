@@ -2,10 +2,11 @@ import { map } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app.reducer';
 import { Injectable } from '@angular/core';
+import { Usuario } from '../models/usuario.model';
 import * as authActions from '../auth/auth.actions';
 import { firebaseDB } from 'src/environments/environment';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { collection, doc, setDoc, getDocs, getDoc, deleteDoc, DocumentData } from '@firebase/firestore';
+import { collection, doc, setDoc, getDoc, DocumentData } from '@firebase/firestore';
 
 
 @Injectable({
@@ -23,14 +24,16 @@ export class AuthService {
 
   async initAuthListener() {
     this.auth.authState.subscribe(firebaseUser => {
-      // console.log(firebaseUser?.uid);
       if(firebaseUser != null) {
         this.readById(firebaseUser.uid)
-          .then(user => console.log("User: ", user))
+          .then((firestoreUser: any) => {
+            console.log("Firestore User: ", firestoreUser);
+            const user = Usuario.fromFirebase(firestoreUser);
+            this.store.dispatch(authActions.setUser({ user }));
+          })
           .catch(error => console.warn("Error: ", error));
-        // this.store.dispatch(authActions.setUser());
       } else {
-        console.log("Call unSetUser method");
+        this.store.dispatch(authActions.unSetUser());
       }
     });
   }
@@ -46,7 +49,7 @@ export class AuthService {
       const { user } = await this.auth.createUserWithEmailAndPassword(email, password);
       if (user !== null) {
         const docId = String(user.uid);
-        const docPayload = { nombre, email, password, uid: docId };
+        const docPayload = { nombre, email, uid: docId };
         return await setDoc(doc(this.collectionRef, docId), docPayload);
       }
     } catch (error) {

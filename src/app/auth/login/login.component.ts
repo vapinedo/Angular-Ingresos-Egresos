@@ -1,4 +1,5 @@
 import Swal from 'sweetalert2';
+import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { AppState } from 'src/app/app.reducer';
@@ -6,7 +7,6 @@ import * as uiActions from 'src/app/shared/ui.actions';
 import { AuthService } from 'src/app/services/auth.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -37,7 +37,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = this.store.select("ui").subscribe(ui => {
       this.cargando = ui.isLoading;
-      console.log("Cargandon subs");
     });
   }
 
@@ -47,17 +46,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.store.dispatch(uiActions.isLoading());
     const { email, password } = this.form.value;
 
-    // Swal.fire({
-    //   title: 'Espere por favor',
-    //   didOpen: () => {
-    //     Swal.showLoading()
-    //   }
-    // });
-
     this.authSvc.loginUsuario(email, password)
       .then(success => {
-        console.log(success);
-        // Swal.close();
         this.store.dispatch(uiActions.stopLoading());
         this.router.navigateByUrl("/");
       })
