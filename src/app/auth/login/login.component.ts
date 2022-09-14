@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
+import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
+import { AppState } from 'src/app/app.reducer';
+import * as uiActions from 'src/app/shared/ui.actions';
+import { AuthService } from 'src/app/services/auth.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -10,13 +14,16 @@ import Swal from 'sweetalert2';
   styles: [
   ]
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   form: FormGroup;
+  cargando: boolean = false;
+  subscription: Subscription = new Subscription();
 
   constructor(
+    private router: Router,
     private fb: FormBuilder,
     private authSvc: AuthService,
-    private router: Router
+    private store: Store<AppState>
   ) { 
     this.form = fb.group({
       email: ["", Validators.required],
@@ -28,31 +35,44 @@ export class LoginComponent implements OnInit {
   get password() { return this.form.get("email"); }
 
   ngOnInit(): void {
+    this.subscription = this.store.select("ui").subscribe(ui => {
+      this.cargando = ui.isLoading;
+      console.log("Cargandon subs");
+    });
   }
 
   onLogin(): void {
+    if(this.form.invalid) { return; }
+
+    this.store.dispatch(uiActions.isLoading());
     const { email, password } = this.form.value;
 
-    Swal.fire({
-      title: 'Espere por favor',
-      didOpen: () => {
-        Swal.showLoading()
-      }
-    });
+    // Swal.fire({
+    //   title: 'Espere por favor',
+    //   didOpen: () => {
+    //     Swal.showLoading()
+    //   }
+    // });
 
     this.authSvc.loginUsuario(email, password)
       .then(success => {
         console.log(success);
-        Swal.close();
+        // Swal.close();
+        this.store.dispatch(uiActions.stopLoading());
         this.router.navigateByUrl("/");
       })
       .catch(error => {
+        this.store.dispatch(uiActions.stopLoading());
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: error.message,
         })
       });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
 }
