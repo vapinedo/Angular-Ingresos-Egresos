@@ -27,7 +27,6 @@ export class AuthService {
       if(firebaseUser != null) {
         this.readById(firebaseUser.uid)
           .then((firestoreUser: any) => {
-            console.log("Firestore User: ", firestoreUser);
             const user = Usuario.fromFirebase(firestoreUser);
             this.store.dispatch(authActions.setUser({ user }));
           })
