@@ -1,4 +1,3 @@
-import Swal from 'sweetalert2';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
@@ -7,6 +6,7 @@ import * as uiActions from 'src/app/shared/ui.actions';
 import { AuthService } from 'src/app/services/auth.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FeedBackService } from 'src/app/services/feedback.service';
 
 @Component({
   selector: 'app-register',
@@ -23,7 +23,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
     private authSvc: AuthService,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private feedBackSvc: FeedBackService,
   ) { 
     this.form = fb.group({
       nombre: ["", Validators.required],
@@ -46,27 +47,16 @@ export class RegisterComponent implements OnInit, OnDestroy {
     if(this.form.invalid) { return; }
 
     this.store.dispatch(uiActions.isLoading());
-    // Swal.fire({
-    //   title: 'Espere por favor',
-    //   didOpen: () => {
-    //     Swal.showLoading()
-    //   }
-    // });
 
     const { nombre, email, password } = this.form.value;
     this.authSvc.crearUsuario(nombre, email, password)
       .then(credenciales => {
-        // Swal.close();
         this.store.dispatch(uiActions.stopLoading());
         this.router.navigateByUrl("/");
       })
       .catch(error => {
         this.store.dispatch(uiActions.stopLoading());
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: error.message,
-        })
+        this.feedBackSvc.error();
       });
   }
 

@@ -1,4 +1,3 @@
-import Swal from 'sweetalert2';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
@@ -7,6 +6,7 @@ import * as uiActions from 'src/app/shared/ui.actions';
 import { AuthService } from 'src/app/services/auth.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FeedBackService } from 'src/app/services/feedback.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +23,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
     private authSvc: AuthService,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private feedBackSvc: FeedBackService,
   ) { 
     this.form = fb.group({
       email: ["", Validators.required],
@@ -53,11 +54,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       })
       .catch(error => {
         this.store.dispatch(uiActions.stopLoading());
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: error.message,
-        })
+        this.feedBackSvc.error();
       });
   }
 

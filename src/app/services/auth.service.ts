@@ -14,6 +14,8 @@ import { collection, doc, setDoc, getDoc, DocumentData } from '@firebase/firesto
 })
 export class AuthService {
 
+  private _user!: Usuario;
+
   private readonly collectionName = "users";
   private readonly collectionRef = collection(firebaseDB, this.collectionName);
 
@@ -22,12 +24,17 @@ export class AuthService {
     private store: Store<AppState>
   ) { }
 
+  get user(): Usuario {
+    return this._user;
+  }
+
   async initAuthListener() {
     this.auth.authState.subscribe(firebaseUser => {
       if(firebaseUser != null) {
         this.readById(firebaseUser.uid)
           .then((firestoreUser: any) => {
             const user = Usuario.fromFirebase(firestoreUser);
+            this._user = user;
             this.store.dispatch(authActions.setUser({ user }));
           })
           .catch(error => console.warn("Error: ", error));

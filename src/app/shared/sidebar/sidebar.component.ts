@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
-import Swal from 'sweetalert2';
+import { FeedBackService } from 'src/app/services/feedback.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,8 +12,9 @@ import Swal from 'sweetalert2';
 export class SidebarComponent implements OnInit {
 
   constructor(
+    private router: Router,
     private auth: AuthService,
-    private router: Router
+    private feedBackSvc: FeedBackService
   ) { }
 
   ngOnInit(): void {
@@ -22,15 +23,10 @@ export class SidebarComponent implements OnInit {
   onLogout(): void {
     this.auth.logout()
       .then(success => {
-        console.log(success);
         this.router.navigateByUrl("/login");
       })
       .catch(error => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: error.message,
-        })
+        this.feedBackSvc.error();
       });
   }
 
