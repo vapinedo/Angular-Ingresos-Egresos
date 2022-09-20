@@ -10,7 +10,7 @@ import { IngresoEgresoService } from '../services/ingreso-egreso.service';
 })
 export class DashboardComponent implements OnInit {
 
-  ingresoEgresoList: any[] | undefined;
+  dataSource: any[] | undefined;
 
   constructor(
     private ingresoEgresoSvc: IngresoEgresoService,
@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit {
     const response = await this.ingresoEgresoSvc.read();
     (response == null) 
       ? console.log("There are not record yet")
-      : this.ingresoEgresoList = response;
+      : this.dataSource = response;
   }
 
 }
