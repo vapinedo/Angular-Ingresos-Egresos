@@ -56,7 +56,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
       })
       .catch(error => {
         this.store.dispatch(uiActions.stopLoading());
-        this.feedBackSvc.error();
+        this.feedBackSvc.error(null);
       });
   }
 

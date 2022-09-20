@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState } from '../app.reducer';
@@ -22,8 +23,8 @@ export class IngresoEgresoComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private feedBackSvc: FeedBackService,
     private store: Store<AppState>,
+    private feedBackSvc: FeedBackService,
     private ingresoEgresoSvc: IngresoEgresoService
   ) { 
     this.form = fb.group({
@@ -36,6 +37,10 @@ export class IngresoEgresoComponent implements OnInit, OnDestroy {
     this.subscriptions = this.store.select("ui").subscribe(state => {
       this.isLoadingSpinner = state.isLoading;
     });
+
+    this.ingresoEgresoSvc.read()
+      .then(console.log)
+      .catch(console.log);
   }
 
   toggleTipoIngreso(): void {
@@ -47,12 +52,14 @@ export class IngresoEgresoComponent implements OnInit, OnDestroy {
     
     this.store.dispatch(uiActions.isLoading());
     const { descripcion, monto } = this.form.value;
-    const ingresoEgreso = new IngresoEgreso(monto, descripcion, this.isIngreso);
+    const uid = uuidv4();
+    const ingresoEgreso = new IngresoEgreso(uid, monto, descripcion, this.isIngreso);
+
     const response = await this.ingresoEgresoSvc.create(ingresoEgreso);
     this.store.dispatch(uiActions.stopLoading());
     (response == undefined) 
       ? this.feedBackSvc.success()
-      : this.feedBackSvc.error();
+      : this.feedBackSvc.error(null);
   }
 
   ngOnDestroy(): void {

@@ -1,7 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
 import { Injectable } from "@angular/core";
-import { AuthService } from './auth.service';
 import { firebaseDB } from 'src/environments/environment';
+import { DocumentData } from "@angular/fire/compat/firestore";
 import { IngresoEgreso } from "../models/ingreso-egreso.model";
 import { collection, doc, getDocs, setDoc } from '@firebase/firestore';
 
@@ -10,26 +9,28 @@ import { collection, doc, getDocs, setDoc } from '@firebase/firestore';
 })
 export class IngresoEgresoService {
 
-    private readonly subCollection = "items";
-    private readonly collection = collection(firebaseDB, "ingreso-egreso");
+    private readonly collectionName = "ingreso-egreso";
+    private readonly collection = collection(firebaseDB, this.collectionName);
 
-    constructor(private authSvc: AuthService) {}
+    constructor() {}
     
-    async create(document: IngresoEgreso): Promise<any> {
+    async create(document: IngresoEgreso): Promise<void | null> {
         try {
-            const docId = uuidv4();
-            const collectionId = String(this.authSvc.user.uid);
-            const documentRef = doc(this.collection, collectionId, this.subCollection, docId);
-            return await setDoc(documentRef, {...document});
+            const docId = document.uid;
+            const docConfig = doc(this.collection, docId);
+            return await setDoc(docConfig, {...document});
         } catch (error) {
-            console.warn("Error adding document: ", error);
-            return error;
+            return null;
         }
     }
 
-    async read(): Promise<any[]> {
-        const documentData = await getDocs(this.collection);
-        const documentList = documentData.docs.map(item => item.data());
-        return documentList;
+    async read(): Promise<DocumentData[] | null> {
+        try {
+            const documentData = await getDocs(this.collection);
+            const documentList = documentData.docs.map(item => item.data());
+            return documentList;
+        } catch(error) {
+            return null;
+        }
     }
 }

@@ -26,7 +26,7 @@ export class SidebarComponent implements OnInit {
         this.router.navigateByUrl("/login");
       })
       .catch(error => {
-        this.feedBackSvc.error();
+        this.feedBackSvc.error(null);
       });
   }
 

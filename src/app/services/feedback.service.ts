@@ -17,10 +17,14 @@ export class FeedBackService {
         });
     }
 
-    error(): Promise<SweetAlertResult<any>> {
+    error(errorMessage: string | null): Promise<SweetAlertResult<any>> {
+        const message = (errorMessage === null) 
+            ? "Oops, ha ocurrido un error"
+            : errorMessage;
+
         return Swal.fire({
             icon: 'warning',
-            title: "Oops, ha ocurrido un error",
+            title: message,
             showConfirmButton: false,
         });
     }
