@@ -1,6 +1,8 @@
+import { Store } from '@ngrx/store';
+import { AppState } from '../app.reducer';
 import { Component, OnInit } from '@angular/core';
-import { IngresoEgreso } from '../models/ingreso-egreso.model';
 import { IngresoEgresoService } from '../services/ingreso-egreso.service';
+import * as ingresoEgresoActions from '../ingreso-egreso/ingreso-egreso.actions';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,17 +12,16 @@ import { IngresoEgresoService } from '../services/ingreso-egreso.service';
 })
 export class DashboardComponent implements OnInit {
 
-  dataSource: any[] | undefined;
-
   constructor(
+    private store: Store<AppState>,
     private ingresoEgresoSvc: IngresoEgresoService,
   ) { }
 
-  async ngOnInit() {
-    const response = await this.ingresoEgresoSvc.read();
-    (response == null) 
-      ? console.log("There are not record yet")
-      : this.dataSource = response;
+  ngOnInit() {
+    const ingresoEgresoList: any =this.ingresoEgresoSvc.read();
+    if (ingresoEgresoList != null) {
+      this.store.dispatch(ingresoEgresoActions.setItems({ items: ingresoEgresoList }))
+    }
   }
 
 }

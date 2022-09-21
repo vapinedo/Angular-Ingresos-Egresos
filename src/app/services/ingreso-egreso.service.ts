@@ -27,8 +27,8 @@ export class IngresoEgresoService {
     async read(): Promise<DocumentData[] | null> {
         try {
             const documentData = await getDocs(this.collection);
-            const documentList = documentData.docs.map(item => item.data());
-            return documentList;
+            const collection = documentData.docs.map(item => item.data());
+            return collection;
         } catch(error) {
             return null;
         }
