@@ -6,6 +6,7 @@ import { Usuario } from '../models/usuario.model';
 import * as authActions from '../auth/auth.actions';
 import { firebaseDB } from 'src/environments/environment';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import * as ingresoEgresoActions from '../ingreso-egreso/ingreso-egreso.actions';
 import { collection, doc, setDoc, getDoc, DocumentData } from '@firebase/firestore';
 
 
@@ -40,6 +41,7 @@ export class AuthService {
           .catch(error => console.warn("Error: ", error));
       } else {
         this.store.dispatch(authActions.unSetUser());
+        this.store.dispatch(ingresoEgresoActions.unSetItems());
       }
     });
   }

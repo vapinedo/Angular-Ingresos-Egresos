@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { setItems, unSetItems } from "./ingreso-egreso.actions";
+import { setItem, setItems, unSetItems } from "./ingreso-egreso.actions";
 import { IngresoEgreso } from '../models/ingreso-egreso.model';
 
 export interface State {
@@ -12,6 +12,12 @@ export const initialState: State = {
 
 const _ingresoEgresoReducer = createReducer(
     initialState,
+    on(setItem, (state, { item }) => {
+        return { 
+            ...state,
+            items: [...state.items, item]
+        }
+    }),
     on(
         setItems, 
         function(state: any, payload: any) {

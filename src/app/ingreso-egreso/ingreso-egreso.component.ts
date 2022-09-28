@@ -6,6 +6,7 @@ import * as uiActions from '../shared/ui.actions';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IngresoEgreso } from '../models/ingreso-egreso.model';
 import { FeedBackService } from '../services/feedback.service';
+import * as ingresoEgresoActions from './ingreso-egreso.actions';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { IngresoEgresoService } from '../services/ingreso-egreso.service';
 
@@ -28,8 +29,10 @@ export class IngresoEgresoComponent implements OnInit, OnDestroy {
     private ingresoEgresoSvc: IngresoEgresoService
   ) { 
     this.form = fb.group({
-      descripcion: ["", Validators.required],
+      tipo: ["", Validators.required],
       monto: ["", Validators.required],
+      uid: [uuidv4(), Validators.required],
+      descripcion: ["", Validators.required],
     });
   }
 
@@ -37,10 +40,6 @@ export class IngresoEgresoComponent implements OnInit, OnDestroy {
     this.subscriptions = this.store.select("ui").subscribe(state => {
       this.isLoadingSpinner = state.isLoading;
     });
-
-    this.ingresoEgresoSvc.read()
-      .then(console.log)
-      .catch(console.log);
   }
 
   toggleTipoIngreso(): void {
@@ -51,15 +50,16 @@ export class IngresoEgresoComponent implements OnInit, OnDestroy {
     if (this.form.invalid) { return; }
     
     this.store.dispatch(uiActions.isLoading());
-    const { descripcion, monto } = this.form.value;
-    const uid = uuidv4();
-    const ingresoEgreso = new IngresoEgreso(uid, monto, descripcion, this.isIngreso);
+    const { uid, descripcion, monto, tipo } = this.form.value;
+    const item = new IngresoEgreso(uid, tipo, Number(monto), descripcion );
 
-    const response = await this.ingresoEgresoSvc.create(ingresoEgreso);
+    const response = await this.ingresoEgresoSvc.create(item);
     this.store.dispatch(uiActions.stopLoading());
-    (response == undefined) 
-      ? this.feedBackSvc.success()
-      : this.feedBackSvc.error(null);
+    
+    if (response == undefined) {
+      this.store.dispatch(ingresoEgresoActions.setItem({ item: item }));
+      this.feedBackSvc.success();
+    }
   }
 
   ngOnDestroy(): void {

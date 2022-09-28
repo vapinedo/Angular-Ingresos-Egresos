@@ -17,8 +17,8 @@ export class DashboardComponent implements OnInit {
     private ingresoEgresoSvc: IngresoEgresoService,
   ) { }
 
-  ngOnInit() {
-    const ingresoEgresoList: any =this.ingresoEgresoSvc.read();
+  async ngOnInit() {
+    const ingresoEgresoList: any = await this.ingresoEgresoSvc.read();
     if (ingresoEgresoList != null) {
       this.store.dispatch(ingresoEgresoActions.setItems({ items: ingresoEgresoList }))
     }
