@@ -3,8 +3,8 @@ import { Subscription } from 'rxjs';
 import { AppState } from '../../app.reducer';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IngresoEgreso } from '../../models/ingreso-egreso.model';
-import { IngresoEgresoService } from '../../services/ingreso-egreso.service';
 import { FeedBackService } from '../../services/feedback.service';
+import { IngresoEgresoService } from '../../services/ingreso-egreso.service';
 
 @Component({
   selector: 'app-detalle',
