@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import Swal, { SweetAlertResult } from "sweetalert2";
+import { ActiveToast, ToastrService } from 'ngx-toastr';
 
 
 @Injectable({
@@ -7,26 +8,27 @@ import Swal, { SweetAlertResult } from "sweetalert2";
 })
 export class FeedBackService {
 
-    constructor() {}
+    constructor(private toastr: ToastrService) { }
 
-    success(): Promise<SweetAlertResult<any>> {
-        return Swal.fire({
-            icon: 'success',
-            title: "Registro guardado exitosamente",
-            showConfirmButton: false,
-        });
+    success(message?: string): ActiveToast<any> {
+        const msg = message ? message : 'Registro creado exitosamente!';
+        return this.toastr.success(msg);
     }
 
-    error(errorMessage: string | null): Promise<SweetAlertResult<any>> {
-        const message = (errorMessage === null) 
-            ? "Oops, ha ocurrido un error"
-            : errorMessage;
+    error(message: string): ActiveToast<any> {
+        return this.toastr.error(message);
+    }    
 
+    confirmSwal() {
         return Swal.fire({
-            icon: 'warning',
-            title: message,
-            showConfirmButton: false,
-        });
-    }
+          title: '¿Está seguro?',
+          text: "Estás a punto de eliminar un registro",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Confirmar'
+        }); 
+    } 
 
 }

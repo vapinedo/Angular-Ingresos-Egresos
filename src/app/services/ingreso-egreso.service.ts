@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { firebaseDB } from 'src/environments/environment';
 import { DocumentData } from "@angular/fire/compat/firestore";
 import { IngresoEgreso } from "../models/ingreso-egreso.model";
-import { collection, doc, getDocs, setDoc } from '@firebase/firestore';
+import { collection, doc, getDocs, setDoc, deleteDoc } from '@firebase/firestore';
 
 @Injectable({
     providedIn: "root"
@@ -32,5 +32,10 @@ export class IngresoEgresoService {
         } catch(error) {
             return null;
         }
+    }
+
+    async delete(uid: string): Promise<void> {
+        const docID = uid;
+        return await deleteDoc(doc(this.collection, docID));
     }
 }

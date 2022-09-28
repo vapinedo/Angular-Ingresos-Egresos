@@ -3,13 +3,13 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { StoreModule } from "@ngrx/store";
 import { appReducers } from './app.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-// import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-// import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
@@ -43,15 +43,21 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    // provideFirestore(() => getFirestore()),
-    // provideFirebaseApp(() => initializeApp(firebaseConfig)),
     AngularFirestoreModule,
     AngularFireAuthModule,
     StoreModule.forRoot(appReducers),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
+    }),
+    ToastrModule.forRoot({
+      maxOpened: 3,
+      timeOut: 7000,
+      autoDismiss: true,
+      preventDuplicates: true,
+      positionClass: 'toast-top-right'
     })
   ],
   providers: [],

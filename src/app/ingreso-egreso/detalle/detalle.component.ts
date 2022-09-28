@@ -3,6 +3,8 @@ import { Subscription } from 'rxjs';
 import { AppState } from '../../app.reducer';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IngresoEgreso } from '../../models/ingreso-egreso.model';
+import { IngresoEgresoService } from '../../services/ingreso-egreso.service';
+import { FeedBackService } from '../../services/feedback.service';
 
 @Component({
   selector: 'app-detalle',
@@ -16,7 +18,9 @@ export class DetalleComponent implements OnInit, OnDestroy {
   ingresoEgresoList: IngresoEgreso[] = [];
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private FeedBackSvc: FeedBackService,
+    private ingresoEgresoSvc: IngresoEgresoService
   ) { }
 
   ngOnInit(): void {
@@ -31,8 +35,11 @@ export class DetalleComponent implements OnInit, OnDestroy {
       : "badge badge-danger";
   }
 
-  onDeleteById(id: string): void {
-    console.log({id});
+  async onDeleteById(id: string): Promise<void> {
+    const response = await this.ingresoEgresoSvc.delete(id);
+    (response == undefined)
+      ? this.FeedBackSvc.success("Registro eliminado exitosamente!")
+      : this.FeedBackSvc.error("Error al eliminar registro");
   }
 
   ngOnDestroy(): void {

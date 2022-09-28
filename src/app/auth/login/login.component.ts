@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       })
       .catch(error => {
         this.store.dispatch(uiActions.stopLoading());
-        this.feedBackSvc.error(null);
+        this.feedBackSvc.error(error);
       });
   }
 
