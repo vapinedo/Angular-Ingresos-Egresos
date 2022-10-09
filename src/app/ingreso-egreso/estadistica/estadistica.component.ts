@@ -37,6 +37,8 @@ export class EstadisticaComponent implements OnInit {
   }
   
   generarEstadistica(items: IngresoEgreso[]) {
+    this.resetIngresoEgreso();
+
     for(const item of items) {
       if(item.tipo === "ingreso") {
         this.totalIngresos += item.monto;
@@ -51,6 +53,13 @@ export class EstadisticaComponent implements OnInit {
       data: [this.totalIngresos, this.totalEgresos]
     };
     this.doughnutChartData.datasets = [chartDataSet];
+  }
+
+  resetIngresoEgreso(): void {
+    this.egresos= 0;
+    this.ingresos = 0;
+    this.totalEgresos = 0;
+    this.totalIngresos = 0;
   }
 
 }
