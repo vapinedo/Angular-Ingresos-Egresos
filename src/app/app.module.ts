@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgChartsModule } from 'ng2-charts';
 
 import { StoreModule } from "@ngrx/store";
 import { appReducers } from './app.reducer';
@@ -63,7 +64,8 @@ OrdenIngresoPipe
       autoDismiss: true,
       preventDuplicates: true,
       positionClass: 'toast-top-right'
-    })
+    }),
+    NgChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
