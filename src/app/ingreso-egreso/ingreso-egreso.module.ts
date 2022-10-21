@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { NgChartsModule } from 'ng2-charts';
 import { SharedModule } from "../shared/shared.module";
-import { RouterModule } from "@angular/router";
+import { DashboardRoutesModule } from "../dashboard/dashboard-routes.module";
 
 import { OrdenIngresoPipe } from "../pipes/orden-ingreso.pipe";
 import { DetalleComponent } from "./detalle/detalle.component";
@@ -26,7 +26,7 @@ const declarations = [
         ReactiveFormsModule,
         NgChartsModule,
         SharedModule,
-        RouterModule
+        DashboardRoutesModule
     ]
 })
 export class IngresoEgresoModule {}
