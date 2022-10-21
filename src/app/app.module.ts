@@ -11,14 +11,14 @@ import { StoreModule } from "@ngrx/store";
 import { appReducers } from './app.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
+import { AuthModule } from './auth/auth.module';
+
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { firebaseConfig, environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
-import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { IngresoEgresoComponent } from './ingreso-egreso/ingreso-egreso.component';
 import { EstadisticaComponent } from './ingreso-egreso/estadistica/estadistica.component';
@@ -34,8 +34,6 @@ OrdenIngresoPipe
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    RegisterComponent,
     DashboardComponent,
     IngresoEgresoComponent,
     EstadisticaComponent,
@@ -47,6 +45,7 @@ OrdenIngresoPipe
   ],
   imports: [
     BrowserModule,
+    AuthModule,
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
@@ -65,7 +64,7 @@ OrdenIngresoPipe
       preventDuplicates: true,
       positionClass: 'toast-top-right'
     }),
-    NgChartsModule
+    NgChartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
