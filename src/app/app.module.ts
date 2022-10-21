@@ -12,6 +12,7 @@ import { appReducers } from './app.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AuthModule } from './auth/auth.module';
+import { SharedModule } from './shared/shared.module';
 
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
@@ -23,9 +24,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { IngresoEgresoComponent } from './ingreso-egreso/ingreso-egreso.component';
 import { EstadisticaComponent } from './ingreso-egreso/estadistica/estadistica.component';
 import { DetalleComponent } from './ingreso-egreso/detalle/detalle.component';
-import { FooterComponent } from './shared/footer/footer.component';
-import { NavbarComponent } from './shared/navbar/navbar.component';
-import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { OrdenIngresoPipe } from './pipes/orden-ingreso.pipe';
 
 // Pipes
@@ -38,14 +36,12 @@ OrdenIngresoPipe
     IngresoEgresoComponent,
     EstadisticaComponent,
     DetalleComponent,
-    FooterComponent,
-    NavbarComponent,
-    SidebarComponent,
     OrdenIngresoPipe
   ],
   imports: [
     BrowserModule,
     AuthModule,
+    SharedModule,
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
