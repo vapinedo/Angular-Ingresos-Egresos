@@ -1,18 +1,16 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgChartsModule } from 'ng2-charts';
 
 import { StoreModule } from "@ngrx/store";
 import { appReducers } from './app.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AuthModule } from './auth/auth.module';
-import { SharedModule } from './shared/shared.module';
+import { IngresoEgresoModule } from './ingreso-egreso/ingreso-egreso.module';
 
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
@@ -20,30 +18,17 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { firebaseConfig, environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { IngresoEgresoComponent } from './ingreso-egreso/ingreso-egreso.component';
-import { EstadisticaComponent } from './ingreso-egreso/estadistica/estadistica.component';
-import { DetalleComponent } from './ingreso-egreso/detalle/detalle.component';
-import { OrdenIngresoPipe } from './pipes/orden-ingreso.pipe';
 
-// Pipes
-OrdenIngresoPipe
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
-    IngresoEgresoComponent,
-    EstadisticaComponent,
-    DetalleComponent,
-    OrdenIngresoPipe
   ],
   imports: [
     BrowserModule,
     AuthModule,
-    SharedModule,
+    IngresoEgresoModule,
     AppRoutingModule,
-    ReactiveFormsModule,
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
@@ -60,7 +45,6 @@ OrdenIngresoPipe
       preventDuplicates: true,
       positionClass: 'toast-top-right'
     }),
-    NgChartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
