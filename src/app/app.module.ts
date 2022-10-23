@@ -10,7 +10,6 @@ import { appReducers } from './app.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AuthModule } from './auth/auth.module';
-import { IngresoEgresoModule } from './ingreso-egreso/ingreso-egreso.module';
 
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
@@ -27,7 +26,6 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     AuthModule,
-    IngresoEgresoModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(firebaseConfig),

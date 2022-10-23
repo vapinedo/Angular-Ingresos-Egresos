@@ -10,6 +10,13 @@ import { RegisterComponent } from './auth/register/register.component';
 const routes: Routes = [
   { path: "login", component: LoginComponent },
   { path: "register", component: RegisterComponent },
+  {
+    path: "",
+    loadChildren: function() {
+      return import("./ingreso-egreso/ingreso-egreso.module")
+      .then(m => m.IngresoEgresoModule)
+    }
+  },
   { path: "**", redirectTo: "" },
 ];
 
